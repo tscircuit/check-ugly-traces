@@ -72,6 +72,6 @@ export function renderUglyTraceFinding(
     .replace("<svg ", '<svg viewBox="0 0 960 690" ')
     .replace(
       "</svg>",
-      `${overlay}<rect x="0" y="600" width="960" height="90" fill="#101827"/><g fill="white" font-family="sans-serif" font-size="15"><text x="20" y="624">${escapeXml(finding.pcb_trace_id)} · ${escapeXml(finding.layer)} · route ${finding.startRouteIndex}–${finding.endRouteIndex}</text><text x="20" y="648">${escapeXml(finding.explanation)}</text><text x="20" y="674" fill="#b9c8da">Pink: offending section. Dashed mint: clear simpler alternative (advisory).</text></g></svg>`,
+      `${overlay}<rect x="0" y="600" width="960" height="90" fill="#101827"/><g fill="white" font-family="sans-serif" font-size="15"><text x="20" y="624">${escapeXml(finding.pcb_trace_id)} · ${escapeXml(finding.layer)} · route ${finding.startRouteIndex}–${finding.endRouteIndex}</text><text x="20" y="648">${escapeXml(finding.explanation)}</text><text x="20" y="674" fill="#b9c8da">Pink: offending section. Dashed mint: clear ${finding.kind === "strange_angle" ? "45°" : "simpler"} alternative (advisory).</text></g></svg>`,
     )
 }

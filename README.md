@@ -38,7 +38,9 @@ The future `tsci check ugly-traces` handler can compile/load Circuit JSON and ca
 
 ## Detection and fixability
 
-The solver steps through one trace per iteration. It examines same-layer windows of up to six segments and proposes a straight or one-bend octilinear replacement. It reports off-grid angles (more than 3° from a multiple of 45° on segments longer than 0.15 mm) or removable bends saving at least 0.2 mm. Defaults can be configured with `clearance`, `minLengthSaved`, and `maxWindowSegments` (2–32).
+`detectNon45DegreeSegments(points)` exposes segment indices, angles, and deviations for standalone direction inspection. The solver applies the clearance checks before emitting findings, keeping the existing `strange_angle` kind for compatibility.
+
+The solver steps through one trace per iteration. It examines same-layer windows of up to six segments and proposes a straight or one-bend octilinear replacement. It reports any segment direction that is not a multiple of 45°, including single segments and segments shorter than 0.15 mm. Only floating-point noise (1e-6 degrees) and degenerate segments (under 1e-6 mm) are ignored. Horizontal, vertical, and diagonal directions are valid in both travel directions. Angle findings may require adding a bend or length to reach a clear octilinear replacement; `lengthSaved` is negative when length is added. Jitter findings still require fewer bends and at least 0.2 mm saved. Defaults can be configured with `clearance`, `minLengthSaved`, and `maxWindowSegments` (2–32).
 
 Both the replacement and the original section must have room around nearby copper. Clearance includes trace half-width and obstacle radius; the original section requires another 0.05 mm of breathing room. Other same-layer traces, pads, vias, and holes block candidates. Pads use conservative circumscribed circles, vias and holes block all layers, and board edge clearance is respected. Neighbouring connected segments can meet at their shared endpoint but cannot be crossed or doubled back over. Layer transitions, internal port anchors, and width changes are not simplified.
 
@@ -49,7 +51,7 @@ This is a conservative local aesthetic heuristic, not a DRC certificate or an au
 All committed visual snapshots are generated from the unmodified deployed Circuit JSON of these real boards:
 
 - [F1C100s v0.4, LCD top/storage right](https://astra--f1c100s-v0-4-0.tscircuit.app/#file=lcd_top_storage_right.circuit.tsx): two findings at default settings.
-- [F1C100s v0.5](https://astra--f1c100s-v0-5-0.tscircuit.app/): no findings at default settings; its overview is still snapshot-tested.
+- [F1C100s v0.5](https://astra--f1c100s-v0-5-0.tscircuit.app/): five non-45° findings at default settings, with annotated close-ups and an overview.
 
 `tests/fixtures/sources.json` records direct source URLs and SHA-256 hashes. No visual test uses a fabricated or modified board. Small synthetic fixtures are only used for nonvisual geometric unit tests. SVGs are compared exactly; PNG previews are committed and rendering is exercised in tests without relying on platform-specific font rasterization.
 
