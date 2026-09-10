@@ -1,10 +1,10 @@
+import { detectNon45DegreeSegments } from "./detect-non-45-degree-segments"
 import { BaseSolver } from "@tscircuit/solver-utils"
 import type { PcbTrace } from "circuit-json"
 import type { GraphicsObject } from "graphics-debug"
 import {
   distance,
   onlyTouchesAtSharedEndpoint,
-  isOctilinear,
   pathLength,
   replacements,
   segments,
@@ -63,13 +63,13 @@ export class UglyTracesSolver extends BaseSolver {
         ? (board.min_trace_to_pad_edge_clearance ?? 0)
         : 0,
     )
-    for (let start = 0; start < trace.route.length - 2; start++) {
+    for (let start = 0; start < trace.route.length - 1; start++) {
       for (
         let end = Math.min(
           start + (this.input.options?.maxWindowSegments ?? 6),
           trace.route.length - 1,
         );
-        end >= start + 2;
+        end >= start + 1;
         end--
       ) {
         const route = trace.route.slice(start, end + 1)
@@ -90,9 +90,8 @@ export class UglyTracesSolver extends BaseSolver {
         if (wires.some((p) => Math.abs(p.width - width) > 1e-6)) continue
         const original = wires.map(({ x, y }) => ({ x, y }))
         if (segments(original).some((s) => distance(s.a, s.b) < 1e-6)) continue
-        const strange = segments(original).some(
-          (s) => distance(s.a, s.b) > 0.15 && !isOctilinear(s),
-        )
+        const non45DegreeSegments = detectNon45DegreeSegments(original)
+        const strange = non45DegreeSegments.length > 0
         const obstacles = this.scene.obstacles.filter(
           (o) =>
             !(
@@ -130,10 +129,9 @@ export class UglyTracesSolver extends BaseSolver {
               segments(path).every((s) =>
                 adjacent.every((o) => onlyTouchesAtSharedEndpoint(s, o)),
               ) &&
-              (strange
-                ? saved >= -1e-6
-                : saved >= (this.input.options?.minLengthSaved ?? 0.2)) &&
-              path.length < original.length &&
+              (strange ||
+                (saved >= (this.input.options?.minLengthSaved ?? 0.2) &&
+                  path.length < original.length)) &&
               pathIsClear({ path, ...context })
             )
           },
@@ -153,7 +151,9 @@ export class UglyTracesSolver extends BaseSolver {
           width,
           lengthSaved,
           clearance,
-          explanation: `${strange ? "Off-grid angles" : "Unnecessary bends"}: ${original.length - 2} bends can become ${suggested.length - 2}; saves ${Math.max(0, lengthSaved).toFixed(2)} mm. Clear alternative at ${clearance.toFixed(2)} mm clearance.`,
+          explanation: strange
+            ? `Non-45° segment at ${Number(non45DegreeSegments[0].angleDegrees.toFixed(6))}°; use 45° multiples. ${lengthSaved < 0 ? "Adds" : "Saves"} ${Math.abs(lengthSaved).toFixed(2)} mm. Clear alternative at ${clearance.toFixed(2)} mm clearance.`
+            : `Unnecessary bends: ${original.length - 2} bends can become ${suggested.length - 2}; saves ${Math.max(0, lengthSaved).toFixed(2)} mm. Clear alternative at ${clearance.toFixed(2)} mm clearance.`,
         })
         start = end - 1
         break

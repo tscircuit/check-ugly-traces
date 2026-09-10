@@ -37,10 +37,18 @@ export const segments = (points: Point[]) =>
   points.slice(1).map((b, i) => ({ a: points[i], b }))
 export const pathLength = (points: Point[]) =>
   segments(points).reduce((sum, s) => sum + distance(s.a, s.b), 0)
-export function isOctilinear({ a, b }: Segment) {
-  const angle =
-    Math.abs((Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI) % 45
-  return Math.min(angle, 45 - angle) < 3
+/** Angular tolerance only for floating-point noise, in degrees. */
+export const ANGLE_EPSILON_DEGREES = 1e-6
+
+export function getSegmentAngle({ a, b }: Segment) {
+  const angleDegrees =
+    ((Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI + 360) % 360
+  const remainder = angleDegrees % 45
+  return { angleDegrees, deviationDegrees: Math.min(remainder, 45 - remainder) }
+}
+
+export function isOctilinear(segment: Segment) {
+  return getSegmentAngle(segment).deviationDegrees <= ANGLE_EPSILON_DEGREES
 }
 export function replacements(a: Point, b: Point): Point[][] {
   const dx = b.x - a.x,

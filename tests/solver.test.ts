@@ -104,8 +104,8 @@ test("rejects replacement blocked by another trace", () => {
         board,
         trace([
           [-4, 0],
-          [-3, 2],
-          [2, 2],
+          [-2, 2],
+          [1, 2],
           [3, 0],
         ]),
         obstacle,

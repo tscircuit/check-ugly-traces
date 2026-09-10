@@ -20,6 +20,7 @@ export type UglyTraceFinding = {
   original: Point[]
   suggested: Point[]
   width: number
+  /** Original minus suggested length in mm; negative when an angle fix adds length. */
   lengthSaved: number
   clearance: number
 }

@@ -13,4 +13,27 @@ exports[`real F1C100s 0.4 findings and visual snapshots 1`] = `
 ]
 `;
 
-exports[`real F1C100s 0.5 findings and visual snapshots 1`] = `[]`;
+exports[`real F1C100s 0.5 findings and visual snapshots 1`] = `
+[
+  {
+    "id": "saved_fanout_pcb_group_0_0-4-5",
+    "kind": "strange_angle",
+  },
+  {
+    "id": "saved_fanout_pcb_group_0_15-1-2",
+    "kind": "strange_angle",
+  },
+  {
+    "id": "saved_fanout_pcb_group_0_76-9-10",
+    "kind": "strange_angle",
+  },
+  {
+    "id": "saved_fanout_pcb_group_0_79-4-5",
+    "kind": "strange_angle",
+  },
+  {
+    "id": "saved_fanout_pcb_group_0_151-1-2",
+    "kind": "strange_angle",
+  },
+]
+`;
