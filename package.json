@@ -1,0 +1,43 @@
+{
+  "name": "@tscircuit/check-ugly-traces",
+  "version": "0.0.1",
+  "type": "module",
+  "module": "lib/index.ts",
+  "files": [
+    "lib"
+  ],
+  "license": "MIT",
+  "repository": "github:tscircuit/check-ugly-traces",
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "start": "cosmos",
+    "build:site": "cosmos-export",
+    "check:ugly-traces": "bun lib/cli.ts",
+    "snapshots:update": "UPDATE_SNAPSHOTS=1 bun test --update-snapshots"
+  },
+  "dependencies": {
+    "@tscircuit/circuit-json-util": "0.0.113",
+    "@tscircuit/solver-utils": "0.0.21",
+    "circuit-json": "0.0.485",
+    "circuit-json-to-connectivity-map": "0.0.30",
+    "circuit-to-svg": "0.0.413",
+    "graphics-debug": "0.0.100",
+    "schematic-symbols": "0.0.244",
+    "transformation-matrix": "3.1.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.12",
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/bun": "^1.4.2",
+    "@types/react": "^19.3.0",
+    "react": "19.1.1",
+    "react-cosmos": "^7.4.1",
+    "react-cosmos-plugin-vite": "^7.4.0",
+    "react-dom": "19.1.1",
+    "typescript": "^5.9.3",
+    "vite": "7.3.0"
+  }
+}

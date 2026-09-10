@@ -1,0 +1,5 @@
+{
+  "formatter": { "indentStyle": "space" },
+  "javascript": { "formatter": { "semicolons": "asNeeded" } },
+  "files": { "includes": ["**", "!tests/fixtures/**", "!cosmos-export/**"] }
+}

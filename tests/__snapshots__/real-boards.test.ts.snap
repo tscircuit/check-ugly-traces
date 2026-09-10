@@ -1,0 +1,16 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`real F1C100s 0.4 findings and visual snapshots 1`] = `
+[
+  {
+    "id": "SOC__source_trace_11_grid0-12-17",
+    "kind": "unnecessary_jitter",
+  },
+  {
+    "id": "SOC__source_trace_32_grid0-23-28",
+    "kind": "unnecessary_jitter",
+  },
+]
+`;
+
+exports[`real F1C100s 0.5 findings and visual snapshots 1`] = `[]`;

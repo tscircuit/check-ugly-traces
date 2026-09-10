@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "Preserve",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "types": ["bun"],
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "paths": { "lib/*": ["./lib/*"], "tests/*": ["./tests/*"] }
+  },
+  "include": ["lib", "tests", "pages", "vite.config.ts"]
+}
